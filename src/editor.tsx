@@ -272,7 +272,7 @@ function App() {
     if (file) {
       loadAnimation(file);
     } else {
-      loadAnimation('examples/hello-movy.js');
+      loadAnimation('examples/hello-movy.js'); // 初始文件
     }
   }
 
@@ -333,7 +333,7 @@ function App() {
           <ul className="pure-menu-list">
             <li className="pure-menu-item pure-menu-has-children pure-menu-allow-hover">
               <a href="#" className="pure-menu-link">
-                Examples
+                👉更多案例 Examples
               </a>
               <ul className="pure-menu-children">
                 {examples.map((item) => generateMenuItem(item))}
@@ -395,7 +395,7 @@ function App() {
             textShadow: '0 1px 1px rgba(0, 0, 0, 0.2)',
           }}
         >
-          {isExporting ? 'Exporting' : 'EXPORT (ctrl-m)'}
+          {isExporting ? 'Exporting' : '点击导出视频 (Ctrl+M)'}
         </button>
       </div>
 
@@ -479,7 +479,7 @@ function App() {
               top: '4px',
             }}
           >
-            RUN (ctrl-enter)
+            点击运行 (Ctrl+Enter)
           </button>
         </div>
       </div>
