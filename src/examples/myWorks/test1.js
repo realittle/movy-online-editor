@@ -34,10 +34,12 @@ function getMaxLen(strList){
 }
 // 设置第一行代码横坐标位置
 let x = 0 - getMaxLen(codeRows) * scale / 2.5; 
+// 将多行代码组合成文本块（日后可在此定义基准点）
+const textGroup = mo.addGroup({scale: 1});
 
 for (let rowIndex in codeRows) { 
     // 注意此处遍历拿到的是数组的索引
-    const row = mo.addText(
+    textGroup.addText(
         codeRows[rowIndex], // 各行代码
         {
             font: 'code', // 仅zh、gdh支持输入中文
@@ -53,3 +55,5 @@ for (let rowIndex in codeRows) {
     // 设置下一行代码纵坐标位置
     y -= scale * 2; 
 }
+// 文本组整体移动
+textGroup.moveTo({position: [-1,1], t: 13})
