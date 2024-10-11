@@ -197,19 +197,20 @@ function App() {
     setIsExporting(true);
   }, [iframe]);
 
+  // 点击运行代码
   function runCode(code: string) {
     if (!containerRef.current) {
       return;
     }
 
-    setIsLoading(true);
+    setIsLoading(true); // 设置状态为：正在加载中
 
-    const container = containerRef.current;
+    const container = containerRef.current; // 定位到当前渲染动画的容器组件
     while (container.firstChild) {
-      container.firstChild.remove();
+      container.firstChild.remove(); // 删除该组件
     }
 
-    const iframeNew = document.createElement('iframe');
+    const iframeNew = document.createElement('iframe'); // 创建新的渲染组件，准备渲染新动画
     iframeNew.style.border = 'none';
     iframeNew.style.position = 'absolute';
     iframeNew.style.top = '0';
@@ -217,9 +218,9 @@ function App() {
     iframeNew.style.width = '100%';
     iframeNew.style.height = '100%';
     iframeNew.src = document.URL;
-    container.appendChild(iframeNew);
+    container.appendChild(iframeNew); // 添加新的内嵌渲染组件
 
-    const doc = iframeNew.contentWindow.document;
+    const doc = iframeNew.contentWindow.document; // 在新的渲染组件DOM中定位元素
     doc.open();
     doc.write('<html><body>');
     doc.write(`<script type="importmap">
@@ -231,6 +232,7 @@ function App() {
       </script>`);
     doc.write('<script src="mathjax/tex-svg.js"></script>');
     doc.write('<script type="module">');
+    // 将代码中匹配到'</script>'的字符替换为'<\\/script>'，即<\/script>
     doc.write(code.replace(/<\/script>/g, '<\\/script>'));
     doc.write('</script></body></html>');
     doc.close();
