@@ -4219,11 +4219,11 @@ function getNextAvailableName(usedNames: string[], name: string) {
   }
   return `${name}${i}`;
 }
-
+// 在视频进度条某处添加标记说明
 export function addMarker(name: string = undefined, t: string | number = undefined) {
   promise = promise.then(() => {
     if (!name) {
-      name = 'm';
+      name = 'm'; // 如果为输入标记文字，默认为m
     }
     name = getNextAvailableName(Object.keys(mainTimeline.labels), name);
     mainTimeline.addLabel(name, t);

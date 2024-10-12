@@ -8,13 +8,14 @@ const codeTxt = `
 MATCH (w1:Word)-[:MEANS]->(dm)
     <-[:MEANS]-(w2:Word)
 WHERE w1.spell = 'judge'
-RETURN dm.text AS meaning, COLLECT(w2.spell) AS synonyms
+RETURN dm.text AS meaning, 
+    COLLECT(w2.spell) AS synonyms
 `;
 // 将代码按行分割存入列表
 const codeRows = codeTxt.trim(' ').trim('\n').split('\n');
 
-// 设置字体大小，使代码块随字体大小而变化
-const scale = 0.25; 
+// 设置字体相对大小，使代码块随字体大小而变化
+const scale = 0.5; 
 
 // 获取代码总行数
 const totalRows = codeRows.length; 
@@ -33,13 +34,17 @@ function getMaxLen(strList){
     return maxStrLen;
 }
 // 设置第一行代码横坐标位置
-let x = 0 - getMaxLen(codeRows) * scale / 2.5; 
-// 将多行代码组合成文本块（日后可在此定义基准点）
-const textGroup = mo.addGroup({scale: 1});
+let x = 0 - getMaxLen(codeRows) * scale / 2.5;
 
+// 将多行代码组合成文本块（无需在此定义基准点）
+const textGroup = mo.addGroup({scale: 1});
+let groupArr = []; // 将多行代码对象存入列表，以便后续单独变更属性
+
+// 注意此处遍历拿到的是数组的索引
 for (let rowIndex in codeRows) { 
-    // 注意此处遍历拿到的是数组的索引
-    textGroup.addText(
+    // 在进度条添加标记
+    mo.addMarker('第' + String(Number(rowIndex) + 1) + '行代码'); 
+    const rowObj = textGroup.addText(
         codeRows[rowIndex], // 各行代码
         {
             font: 'code', // 仅zh、gdh支持输入中文
@@ -52,8 +57,23 @@ for (let rowIndex in codeRows) {
       cursorBlinkCount: 0, // 该行代码打完后的光标闪烁次数
       cursorBlinkSpeed: 5, // 该行代码打完后的光标闪烁速度
     });
+    // 将各行代码对象依次存入数组中
+    groupArr.push(rowObj);
     // 设置下一行代码纵坐标位置
     y -= scale * 2; 
 }
-// 文本组整体移动
-textGroup.moveTo({position: [-1,1], t: 13})
+
+mo.pause(1); // 动画暂停1秒
+
+// 等代码块输入完毕，即更改颜色
+// textGroup.changeColor('#0073ff')
+
+// 文本组整体移动，position为相对位移位置
+textGroup.scaleTo(0.7).moveTo({position: [-4,3]}); //TODO：如何让两个步骤同时进行
+// textGroup.scaleTo(0.5).moveTo({position: [-5.3,3.5]});
+
+// 逐行变色
+for (let index in groupArr) { // TODO：该行褪色的同时，给下一行上色
+  groupArr[index].changeColor('#0073ff')// .changeColor('#fff')
+}
+
