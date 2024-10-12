@@ -59,19 +59,18 @@ for (let i in codeRows) {
     // 设置下一行代码纵坐标位置
     y -= scale * 2; 
 }
-
 mo.pause(1); // 动画暂停1秒
 
-// 等代码块输入完毕，即更改颜色
-// textGroup.changeColor('#0073ff')
-
 // 文本组整体移动，position为相对位移位置
-textGroup.scaleTo(0.7).moveTo({position: [-4,3]}); //TODO：如何让两个步骤同时进行
-// textGroup.scaleTo(0.5).moveTo({position: [-5.3,3.5]});
+// 让两个步骤同时进行的方法 -- t: '<'
+// textGroup.scaleTo(0.7).moveTo({position: [-4,3],t: '<'});
+textGroup.scaleTo(0.5).moveTo({position: [5.3,-3.5],t: '<'});
 
-// 逐行变色
+// 获取GroupObject下的子对象数组
 const groupArr = textGroup.children;
-// TODO：该行褪色的同时，给下一行上色
 for (let i in groupArr) {
-  groupArr[i].changeColor('#0073ff')// .changeColor('#fff')
+  // 逐行变色
+  groupArr[i].changeColor('#0073ff').changeColor('#fff');
+  // 所在行褪色的同时，给下一行上色
+  groupArr[String(Number(i)+1)].changeColor('#0073ff',{t: '<'}); // TODO：缩短变色间隔
 }
