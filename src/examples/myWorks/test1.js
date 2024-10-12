@@ -38,14 +38,13 @@ let x = 0 - getMaxLen(codeRows) * scale / 2.5;
 
 // 将多行代码组合成文本块（无需在此定义基准点）
 const textGroup = mo.addGroup({scale: 1});
-let groupArr = []; // 将多行代码对象存入列表，以便后续单独变更属性
 
 // 注意此处遍历拿到的是数组的索引
-for (let rowIndex in codeRows) { 
+for (let i in codeRows) { 
     // 在进度条添加标记
-    mo.addMarker('第' + String(Number(rowIndex) + 1) + '行代码'); 
-    const rowObj = textGroup.addText(
-        codeRows[rowIndex], // 各行代码
+    mo.addMarker('第' + String(Number(i) + 1) + '行代码'); 
+    textGroup.addText(
+        codeRows[i], // 各行代码
         {
             font: 'code', // 仅zh、gdh支持输入中文
             position: [x,y],
@@ -57,8 +56,6 @@ for (let rowIndex in codeRows) {
       cursorBlinkCount: 0, // 该行代码打完后的光标闪烁次数
       cursorBlinkSpeed: 5, // 该行代码打完后的光标闪烁速度
     });
-    // 将各行代码对象依次存入数组中
-    groupArr.push(rowObj);
     // 设置下一行代码纵坐标位置
     y -= scale * 2; 
 }
@@ -73,7 +70,8 @@ textGroup.scaleTo(0.7).moveTo({position: [-4,3]}); //TODO：如何让两个步�
 // textGroup.scaleTo(0.5).moveTo({position: [-5.3,3.5]});
 
 // 逐行变色
-for (let index in groupArr) { // TODO：该行褪色的同时，给下一行上色
-  groupArr[index].changeColor('#0073ff')// .changeColor('#fff')
+const groupArr = textGroup.children;
+// TODO：该行褪色的同时，给下一行上色
+for (let i in groupArr) {
+  groupArr[i].changeColor('#0073ff')// .changeColor('#fff')
 }
-
