@@ -26,8 +26,9 @@ let y = totalRows * scale;
 function getMaxLen(strList){ 
     let maxStrLen = 0;
     for(let i in strList) {
-        const strLen = codeRows[i].length; // 获取各行代码的长度
-        if (strLen > maxStrLen){
+        // 获取各行代码的长度
+        const strLen = codeRows[i].length;
+        if (strLen > maxStrLen) {
             maxStrLen = strLen;
         }
     }
@@ -52,14 +53,14 @@ for (let i in codeRows) {
             scale,
         }
     ).typeText({
-      interval: 0.1, // 每打一个字符串的间隔时长
+      interval: 0.03, // 每打一个字符串的间隔时长
       cursorBlinkCount: 0, // 该行代码打完后的光标闪烁次数
       cursorBlinkSpeed: 5, // 该行代码打完后的光标闪烁速度
     });
     // 设置下一行代码纵坐标位置
     y -= scale * 2; 
 }
-mo.pause(1); // 动画暂停1秒
+mo.pause(0.5); // 动画暂停，以秒为单位
 
 // 文本组整体移动，position为相对位移位置
 // 让两个步骤同时进行的方法 -- t: '<'
@@ -69,8 +70,12 @@ textGroup.scaleTo(0.5).moveTo({position: [5.3,-3.5],t: '<'});
 // 获取GroupObject下的子对象数组
 const groupArr = textGroup.children;
 for (let i in groupArr) {
+  let timeParam;
+  // 防止第一行提前变色
+  if (Number(i)){ timeParam = {t: '<'};}
   // 逐行变色
-  groupArr[i].changeColor('#0073ff').changeColor('#fff');
+  groupArr[i].changeColor('#0073ff',timeParam) // 缩短变色间隔
+    .changeColor('#fff');
   // 所在行褪色的同时，给下一行上色
-  groupArr[String(Number(i)+1)].changeColor('#0073ff',{t: '<'}); // TODO：缩短变色间隔
+  groupArr[String(Number(i)+1)].changeColor('#0073ff',{t: '<'});
 }
